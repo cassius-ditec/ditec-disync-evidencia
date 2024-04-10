@@ -1,16 +1,11 @@
 <template>
   <Init class="layout" ref="layout" v-if="showPage">
     <aside>
-      <MenuPainelAdmin v-if="menuLateral" @menulateral="hiddenAside"/>
+      <MenuPainelAdmin v-if="menuLateral" @menulateral="hiddenAside" />
     </aside>
     <header>
       <div class="left">
-        <Button
-          type="dashed"
-          icon="md-menu"
-          size="large"
-          @click.prevent="menuLateral = !menuLateral"
-        ></Button>
+        <Button type="dashed" icon="md-menu" size="large" @click.prevent="menuLateral = !menuLateral"></Button>
         <img src="/pages/painel/logo_disync_evidencias.png" />
         <img src="/pages/painel/logo_disync_obras.png" />
       </div>
@@ -23,19 +18,19 @@
           </span>
           <DropdownMenu slot="list">
             <DropdownItem name="self">Configuração</DropdownItem>
-            <DropdownItem name="logoff" style="color: #ed4014" divided
-              >Sair do sistema</DropdownItem
-            >
+            <DropdownItem name="logoff" style="color: #ed4014" divided>Sair do sistema</DropdownItem>
           </DropdownMenu>
         </Dropdown>
       </div>
     </header>
-    <main><NuxtChild /></main>
+    <main>
+      <NuxtChild />
+    </main>
   </Init>
 </template>
 
 <script>
-import { mapActions } from "vuex";
+import { mapGetters, mapActions } from "vuex";
 import { get } from "@/services/api";
 export default {
   data() {
@@ -48,6 +43,7 @@ export default {
     };
   },
   mounted() {
+    this.validateUserEmpresa()
     this.start();
     let status = this.$store.getters["auth/getStatus"];
     if (!status) {
@@ -66,6 +62,14 @@ export default {
     $route() {
       this.validateUser();
     },
+    getUserEmpresa(v){
+      if(!!!v) return
+      if( v == 1 ) return
+      this.$router.push({ name: "login" });
+    }
+  },
+  computed: {
+    ...mapGetters("auth", ["getUserEmpresa"]),
   },
   methods: {
     ...mapActions("auth", ["start", "zerar", "setUser"]),
@@ -97,8 +101,11 @@ export default {
           break;
       }
     },
-    hiddenAside(){
+    hiddenAside() {
       this.menuLateral = false
+    },
+    validateUserEmpresa(){
+      
     }
   },
 };
@@ -108,6 +115,7 @@ export default {
 * {
   box-sizing: border-box;
 }
+
 .layout {
   display: grid;
   grid-template: "aside header" min-content "aside main" 1fr / min-content 1fr;
@@ -115,14 +123,14 @@ export default {
   height: 100vh;
 }
 
-.layout > aside {
+.layout>aside {
   grid-area: aside;
   overflow: hidden;
   overflow-y: auto;
   border-right: 1px solid #f5f5f5;
 }
 
-.layout > header {
+.layout>header {
   grid-area: header;
   padding: 0px 0px 0px 15px;
   display: flex;
@@ -130,23 +138,28 @@ export default {
   justify-content: space-between;
   border-bottom: 2px solid #f5f7f9;
 }
-.layout > header .left,
-.layout > header .right {
+
+.layout>header .left,
+.layout>header .right {
   display: flex;
   gap: 15px;
   align-items: center;
 }
+
 img {
   height: 50px;
   padding: 5px;
 }
-.layout > main {
+
+.layout>main {
   grid-area: main;
   overflow: auto;
 }
-.layout > main > main {
-  padding:15px;
+
+.layout>main>main {
+  padding: 15px;
 }
+
 .grid-dropdown {
   display: grid;
   grid-template: "unidade botao" min-content "nome botao" min-content / 1fr 30px;
@@ -155,19 +168,23 @@ img {
   align-items: center;
   justify-items: end;
 }
-.grid-dropdown > *:nth-child(1) {
+
+.grid-dropdown>*:nth-child(1) {
   font-size: 10px;
   font-weight: 900;
   grid-area: unidade;
 }
-.grid-dropdown > *:nth-child(2) {
+
+.grid-dropdown>*:nth-child(2) {
   font-size: 14px;
   grid-area: nome;
 }
-.grid-dropdown > *:nth-child(3) {
+
+.grid-dropdown>*:nth-child(3) {
   grid-area: botao;
   align-items: center;
 }
+
 .mouse_hover {
   cursor: pointer;
 }

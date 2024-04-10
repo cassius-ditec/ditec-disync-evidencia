@@ -1,6 +1,6 @@
 <template>
   <Init class="imagem-fundo">
-    <img src="/pages/login/logo_disync_monitoramento_obra.png" />
+    <img src="/pages/login/ditec.png" />
   </Init>
 </template>
 <style scoped>
