@@ -1,0 +1,6 @@
+<!--  
+<h5>Aviso de Atualização do Sistema</h5>
+<p style="margin-top:10px; font-size: 14px;">No dia <u>18 de janeiro de 2024</u>, das <b>01:00 às 02:00 (UTC)</b>, o sistema estará passando por uma atualização programada. Durante esse período, podem ocorrer oscilações temporárias no serviço. Pedimos desculpas por qualquer inconveniente causado.
+
+<br />Agradecemos pela sua compreensão.</p>
+-->
