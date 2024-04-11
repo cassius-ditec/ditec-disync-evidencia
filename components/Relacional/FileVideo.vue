@@ -1,6 +1,6 @@
 <template>
   <div v-if="urlFile" class="video">
-    <video controls @timeupdate="handleTimeUpdate">
+    <video controls @timeupdate="handleTimeUpdate" autoplay>
       <source :src="urlFile" type="video/mp4" />
     </video>
     <Button @click="downloadFile">Baixar Arquivo</Button>

@@ -78,6 +78,20 @@ export default {
       start: false,
     };
   },
+  watch: {
+    evidencia(item) {
+      if (Object.keys(item).length === 0) {
+        this.localizacao = {}
+        this.currentPosition = null
+        this.start = false,
+        this.center = { lat: -15.7213698, lng: -65.8917826 },
+        this.markers = [{ gps: { lat: -0, lng: -0 } }]
+      } 
+      else if([1, 3, 4].includes(item.tipo_Arquivo)) {
+        this.initMapa();
+      }
+    },
+  },
   computed: {
     ...mapGetters("auth", ["getUserEmpresa"]),
     localizacaoAtual(){
@@ -89,7 +103,7 @@ export default {
   },
   methods: {
     async initMapa() {
-      await get("/api/VideoDataGPS/VideoData/evidencia", {
+      await get("/api/VideoDataGPS/VideoData/evidencia", {  
         id: this.evidencia.iD_Evidencia,
       }).then((data) => {
         this.markers = data.map((el) => ({
@@ -99,6 +113,18 @@ export default {
             lng: parseFloat(el.longitude),
           },
         }));
+        if(this.evidencia.tipo_Arquivo !== 2) {
+          if (this.markers.length > 0) {
+            let marker = this.markers[0];
+            this.currentPosition = marker.gps;
+            this.localizacao = {
+              end: marker.endereco,
+              lat: marker.gps.lat,
+              lng: marker.gps.lng,
+              center: marker.gps,
+            };
+          }
+        }
       });
     },
     handleVideoTimeUpdate(currentTime) {
