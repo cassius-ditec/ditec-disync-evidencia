@@ -2,22 +2,15 @@
   <DataGrid :titulo="getUser.empresa.flagInfo ? 'Ocorrência' : 'Caso'">
     <template #list-left>
       <Perfil action="caso-new">
-        <Button
-          type="primary"
-          icon="md-add-circle"
-          :to="{ name: 'painel-caso-new' }"
-          > {{ getUser.empresa.flagInfo ? 'Nova Ocorrência' : 'Novo Caso' }} 
+        <Button type="primary" icon="md-add-circle" :to="{ name: 'painel-caso-new' }"> {{ getUser.empresa.flagInfo ?
+          'Nova Ocorrência' : 'Novo Caso' }}
         </Button>
       </Perfil>
     </template>
     <template #list-right>
       <ButtonGroup>
-        <Button icon="md-refresh-circle" @click.prevent="refreshData"
-          >Recarregar</Button
-        >
-        <Button icon="md-search" @click.prevent="search = !search"
-          >Pesquisar</Button
-        >
+        <Button icon="md-refresh-circle" @click.prevent="refreshData">Recarregar</Button>
+        <Button icon="md-search" @click.prevent="search = !search">Pesquisar</Button>
       </ButtonGroup>
       <Dropdown @on-click="itemDrop">
         <Button icon="md-download">Download</Button>
@@ -33,13 +26,7 @@
       <Input search placeholder="Pesquisar" clearable v-model="query" />
     </template>
     <template #table>
-      <Table
-        stripe
-        :columns="columns"
-        :data="data"
-        :loading="loading"
-        ref="table"
-      >
+      <Table stripe :columns="columns" :data="data" :loading="loading" ref="table">
         <template #classificacao="{ row }">
           {{ row.classificacao ? row.classificacao.descricao ?? "-" : "-" }}
         </template>
@@ -53,60 +40,31 @@
         </template>
         <template #action="{ row }">
           <Perfil action="caso-relacional-evidencia">
-            <Button
-              :to="{
-                name: 'painel-caso-id-evidencia',
-                params: { id: row.idCasos },
-              }"
-              icon="md-add"
-              shape="circle"
-              size="small"
-              type="primary"
-              >Evidências</Button
-            ></Perfil
-          >
+            <Button :to="{
+              name: 'painel-caso-id-evidencia',
+              params: { id: row.idCasos },
+            }" icon="md-add" shape="circle" size="small" type="primary">Evidências</Button>
+          </Perfil>
           <Perfil action="caso-notes">
-            <Button
-              :to="{
-                name: 'painel-caso-id-nota',
-                params: { id: row.idCasos },
-              }"
-              icon="md-add"
-              shape="circle"
-              size="small"
-              type="primary"
-              >Notas</Button
-            ></Perfil
-          >
+            <Button :to="{
+              name: 'painel-caso-id-nota',
+              params: { id: row.idCasos },
+            }" icon="md-add" shape="circle" size="small" type="primary">Notas</Button>
+          </Perfil>
           <Perfil action="caso-upload">
-            <Button
-              :to="{
-                name: 'painel-caso-id-upload',
-                params: { id: row.idCasos },
-              }"
-              icon="md-add"
-              shape="circle"
-              size="small"
-              type="primary"
-              >Upload</Button
-            ></Perfil
-          >
+            <Button :to="{
+              name: 'painel-caso-id-upload',
+              params: { id: row.idCasos },
+            }" icon="md-add" shape="circle" size="small" type="primary">Upload</Button>
+          </Perfil>
           <Perfil action="caso-edit">
-            <Button
-              :to="{
-                name: 'painel-caso-idCasos',
-                params: row,
-              }"
-              icon="md-create"
-              >Editar</Button
-            ></Perfil
-          >
+            <Button :to="{
+              name: 'painel-caso-idCasos',
+              params: row,
+            }" icon="md-create">Editar</Button>
+          </Perfil>
           <Perfil action="caso-delete">
-            <Button
-              type="error"
-              icon="md-trash"
-              @click.prevent="openModal(row.idCasos)"
-            ></Button>
+            <Button type="error" icon="md-trash" @click.prevent="openModal(row.idCasos)"></Button>
           </Perfil>
         </template>
       </Table>
@@ -235,30 +193,30 @@ export default {
       switch (click) {
         case "pdf":
           createPDF(tipoFlag, this.data, [
-            ["idCasos", "idCasos"],
+            ["ID", "idCasos"],
             [
-              "dataCaso",
+              "Data",
               "dataCaso",
               (v) =>
                 this.$moment(v, "YYYY-MM-DD[T]HH:mm:ss").format("DD/MM/YYYY"),
             ],
             ["Ocorrência", "ocorrencia"],
-            ["classificacao", "classificacao.descricao"],
-            ["user", "user.nome"],
+            ["Classificação", "classificacao.descricao"],
+            ["Usuário", "user.nome"],
           ]);
           break;
         case "excel":
           createExcel(tipoFlag, this.data, [
-            ["idCasos", "idCasos"],
+            ["ID", "idCasos"],
             [
-              "dataCaso",
+              "Data",
               "dataCaso",
               (v) =>
                 this.$moment(v, "YYYY-MM-DD[T]HH:mm:ss").format("DD/MM/YYYY"),
             ],
             ["Ocorrência", "ocorrencia"],
-            ["classificacao", "classificacao.descricao"],
-            ["user", "user.nome"],
+            ["Classificação", "classificacao.descricao"],
+            ["Usuário", "user.nome"],
           ]);
           break;
       }

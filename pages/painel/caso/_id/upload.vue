@@ -3,26 +3,19 @@
     <template #form>
       <WizardForm :form="form" @on-validate="enviar" btSend="Upload">
         <FormItem label="Upload" prop="file">
-          <Upload action="" :before-upload="handleUpload">
-            <Button icon="ios-cloud-upload-outline">
-              Selecione o arquivo para upload
-            </Button>
-          </Upload>
-          {{ nomeArquivo }}
-        </FormItem>
-
-        <FormItem label="Duração">
-          <Input v-model="form.fields.duracao"></Input>
+          <div class="upload">
+            <Upload action="" :before-upload="handleUpload" type="drag">
+              <div style="width:100%; padding: 20px;">
+                <Icon type="ios-cloud-upload" size="52" style="color: #3399ff"></Icon>
+                <p><small>Arrasta ou Clique para escolher</small> <br />{{ nomeArquivo }}</p>
+              </div>
+            </Upload>
+          </div>
         </FormItem>
 
         <FormItem label="Data">
-          <DatePicker
-            format="dd/MM/yyyy"
-            v-model="form.fields.data"
-            type="date"
-            placeholder="Selecione a data do upload"
-            style="width: 100%"
-          ></DatePicker>
+          <DatePicker format="dd/MM/yyyy" v-model="form.fields.data" type="date"
+            placeholder="Selecione a data do upload" style="width: 100%"></DatePicker>
         </FormItem>
 
         <FormItem label="Tags">
@@ -31,36 +24,21 @@
 
         <FormItem label="Classificação" prop="classificacao">
           <Select v-model="form.fields.classificacao" filterable>
-            <Option
-              v-for="(classificacao, i) in classificacao.data"
-              :value="classificacao.value"
-              :key="i"
-              >{{ classificacao.label }}</Option
-            >
+            <Option v-for="(classificacao, i) in classificacao.data" :value="classificacao.value" :key="i">{{
+              classificacao.label }}</Option>
           </Select>
         </FormItem>
 
         <FormItem label="Agente" prop="agente">
           <Select v-model="form.fields.agente" filterable>
-            <Option
-              v-for="(agente, i) in agente.data"
-              :value="agente.value"
-              :key="i"
-              >{{ agente.label }}</Option
-            >
+            <Option v-for="(agente, i) in agente.data" :value="agente.value" :key="i">{{ agente.label }}</Option>
           </Select>
         </FormItem>
       </WizardForm>
     </template>
-    <RelacionalEvidencia
-      :evidencia="evidencia"
-      @limpar-evidencia="limparEvidencia"
-    />
+    <RelacionalEvidencia :evidencia="evidencia" @limpar-evidencia="limparEvidencia" />
     <Timeline>
-      <TimelineItem
-        v-for="(evidencias, data) in getEvidenciasGroupData"
-        :key="data"
-      >
+      <TimelineItem v-for="(evidencias, data) in getEvidenciasGroupData" :key="data">
         <p class="time">{{ dataBr(data) }}</p>
         <div class="grid-content">
           <Table stripe size="small" :columns="columns" :data="evidencias">
@@ -71,15 +49,8 @@
               <RelacionalThumb :evidencia="row" />
             </template>
             <template #arquivo="{ row }">
-              <Tag color="magenta" v-if="row.data_Expurgo"
-                >Expurgado em: {{ dataBr(row.data_Expurgo) }}</Tag
-              >
-              <Button
-                size="small"
-                @click="showEvidencia(row)"
-                style="font-size: 10px"
-                >{{ row.nome_Arquivo }}</Button
-              >
+              <Tag color="magenta" v-if="row.data_Expurgo">Expurgado em: {{ dataBr(row.data_Expurgo) }}</Tag>
+              <Button size="small" @click="showEvidencia(row)" style="font-size: 10px">{{ row.nome_Arquivo }}</Button>
             </template>
           </Table>
         </div>
@@ -228,7 +199,7 @@ export default {
       );
 
       let evidencias = JSON.stringify(schema);
-      
+
       let formData = new FormData();
       formData.append("file", this.form.fields.file);
 
@@ -239,19 +210,43 @@ export default {
         .then(() => {
           this.$Notice.success({
             title: "Arquivo enviado com sucesso",
-          });
-          form.resetFields();
-          this.init();
+          });          
         })
         .catch((error) => {
           this.$Notice.error({
             title: "Arquivo existente",
             desc: error,
           });
-        });
+        }).finally(_ => {
+          form.resetFields();
+          this.nomeArquivo = null;
+          this.form.fields = {
+            agente: "",
+            tags: "",
+            data: "",
+            duracao: null,
+            classificacao: "",
+            file: null,
+          }
+          this.init();
+        })
 
     },
     handleUpload(file) {
+      if (file.type.startsWith('video/')) {
+        const self = this;
+        let reader = new FileReader();
+        reader.onload = function (event) {
+          let video = document.createElement('video');
+          video.src = event.target.result;
+          video.onloadedmetadata = function () {
+            let duration = video.duration;
+            self.form.fields.duracao = duration;
+          };
+        };
+        reader.readAsDataURL(file);
+      }
+      this.form.fields.data = new Date(file.lastModified)
       this.form.fields.file = file;
       this.nomeArquivo = file.name;
       return false;
@@ -277,5 +272,10 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
+.upload {
+  clear: both;
+  width: 100%;
+  display: block;
+}
 </style>
