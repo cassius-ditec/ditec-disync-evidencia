@@ -11,13 +11,8 @@
         </FormItem>
 
         <FormItem label="Data" prop="data">
-          <DatePicker
-            format="dd/MM/yyyy"
-            v-model="form.fields.data"
-            type="date"
-            placeholder="Selecione a data da nota"
-            style="width: 100%"
-          />
+          <DatePicker format="dd/MM/yyyy" v-model="form.fields.data" type="date" placeholder="Selecione a data da nota"
+            style="width: 100%" />
         </FormItem>
       </WizardForm>
     </template>
@@ -26,10 +21,7 @@
         <p class="time">{{ $moment(data).format("DD/MM/YYYY") }}</p>
         <List border>
           <ListItem v-for="(nota, iNota) in notas" :key="iNota">
-            <ListItemMeta
-              :title="nota.titulo"
-              :description="nota.nota"
-            />
+            <ListItemMeta :title="nota.titulo" :description="nota.nota" />
           </ListItem>
 
         </List>
@@ -133,11 +125,9 @@ export default {
             title: "Notificação de Erro ao cadastrar",
             desc: error,
           });
-        });
+        })
+        .finally(_ => this.form.fields.data = schema.dataNota)
     },
   },
 };
 </script>
-
-<style>
-</style>
