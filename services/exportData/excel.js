@@ -47,12 +47,18 @@ function mapDataToSheet(data, cols, colunaTabulada) {
 
 export function createExcel(title, data, cols, colunaTabulada = null) {
     const sheetData = mapDataToSheet(data, cols, colunaTabulada);
+    
+    // Adicionando cabeçalhos ao início do array de dados
+    const headerRow = cols.map(col => col[0]);
+    sheetData.unshift(headerRow);
+
     const worksheet = XLSX.utils.aoa_to_sheet(sheetData);
     const workbook = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(workbook, worksheet, 'Planilha 1');
+    XLSX.utils.book_append_sheet(workbook, worksheet, title);
 
     const currentDate = new Date().toLocaleDateString().replace(/\//g, '-');
     const fileName = `${title}_${currentDate}.xlsx`;
 
     XLSX.writeFile(workbook, fileName);
 }
+

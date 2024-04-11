@@ -198,18 +198,6 @@ export default {
             ["Telefone", "telefone"],
             ["Unidade", "unidade.nome"],
             ["Perfil", "perfil.nome"],
-            [
-              "Último Acesso",
-              "ultimoAcesso",
-              (field) =>
-                new Date(field).toLocaleString("pt-BR", {
-                  day: "2-digit",
-                  month: "2-digit",
-                  year: "numeric",
-                  hour: "2-digit",
-                  minute: "2-digit",
-                }),
-            ],
           ]);
           break;
         case "excel":
@@ -221,18 +209,6 @@ export default {
             ["Telefone", "telefone"],
             ["Unidade", "unidade.nome"],
             ["Perfil", "perfil.nome"],
-            [
-              "Último Acesso",
-              "ultimoAcesso",
-              (field) =>
-                new Date(field).toLocaleString("pt-BR", {
-                  day: "2-digit",
-                  month: "2-digit",
-                  year: "numeric",
-                  hour: "2-digit",
-                  minute: "2-digit",
-                }),
-            ],
           ]);
           break;
       }

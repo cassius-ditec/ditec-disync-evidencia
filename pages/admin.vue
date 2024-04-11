@@ -64,12 +64,14 @@ export default {
     },
     getUserEmpresa(v){
       if(!!!v) return
-      if( v == 1 ) return
+      if( v == 1 ) {
+        if (this.getUserId == 1) return
+      }
       this.$router.push({ name: "login" });
     }
   },
   computed: {
-    ...mapGetters("auth", ["getUserEmpresa"]),
+    ...mapGetters("auth", ["getUserEmpresa","getUserId"]),
   },
   methods: {
     ...mapActions("auth", ["start", "zerar", "setUser"]),

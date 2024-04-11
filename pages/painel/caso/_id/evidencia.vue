@@ -3,7 +3,7 @@
     <section>
       <Collapse v-model="tabOpen">
         <Panel name="caso">
-          {{ caso.ocorrencia }}
+          {{ caso.ocorrencia }} 
           <template #content>
             <div class="data-list-01">
               <div>Ocorrência</div>
@@ -266,5 +266,13 @@ export default {
 .notas article header {
   display: grid;
   grid-template: "." "." / 1fr;
+}
+
+</style>
+
+<style>
+.ivu-collapse>.ivu-collapse-item>.ivu-collapse-header{
+  height: auto;
+  min-height: 38px;
 }
 </style>
