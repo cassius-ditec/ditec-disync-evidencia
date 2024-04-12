@@ -2,12 +2,8 @@
   <Init>
     <DataGrid titulo="Log de Bodycams">
       <template #list-right>
-        <Button icon="md-search" @click.prevent="search = !search"
-          >Pesquisar</Button
-        >
-        <Button icon="md-mail" @click.prevent="openModalEmail = true"
-          >Enviar por e-mail</Button
-        >
+        <Button icon="md-search" @click.prevent="search = !search">Pesquisar</Button>
+        <Button icon="md-mail" @click.prevent="openModalEmail = true">Enviar por e-mail</Button>
         <Dropdown @on-click="itemDrop">
           <Button icon="md-download">Download</Button>
           <template #list>
@@ -22,12 +18,7 @@
         <Input search placeholder="Pesquisar" clearable v-model="query" />
       </template>
       <template #table>
-        <Table
-          stripe
-          :columns="columns"
-          :data="response.data"
-          :loading="loading"
-        >
+        <Table stripe :columns="columns" :data="response.data" :loading="loading">
         </Table>
       </template>
     </DataGrid>
@@ -165,16 +156,23 @@ export default {
                   "DD/MM/YYYY HH:mm:ss"
                 ),
             ],
-            ["Bodycam", "bodycam.deviceID"],
-            ["Agente", "agente.nome"],
+            ["Bodycam", "bodycam", (v) => { return v?.deviceID ?? "#" }],
+            ["Agente", "agente", (v) => { return v?.nome ?? "#" }],
             ["Mensagem", "action"],
           ]);
           break;
         case "excel":
           createExcel("Logs Bodycam", this.response.data, [
-            ["Data/Hora", "dataHoraLog"],
-            ["Bodycam", "bodycam.deviceID"],
-            ["Agente", "agente.nome"],
+            [
+              "Data/Hora",
+              "dataHoraLog",
+              (field) =>
+                this.$moment(field, "YYYY-MM-DD[T]HH:mm:ss").format(
+                  "DD/MM/YYYY HH:mm:ss"
+                ),
+            ],
+            ["Bodycam", "bodycam", (v) => { return v?.deviceID ?? "#" }],
+            ["Agente", "agente", (v) => { return v?.nome ?? "#" }],
             ["Mensagem", "action"],
           ]);
           break;
@@ -202,8 +200,8 @@ export default {
                 "DD/MM/YYYY HH:mm:ss"
               ),
           ],
-          ["Bodycam", "bodycam.deviceID"],
-          ["Agente", "agente.nome"],
+          ["Bodycam", "bodycam", (v) => { return v?.deviceID ?? "#" }],
+          ["Agente", "agente", (v) => { return v?.nome ?? "#" }],
           ["Mensagem", "action"],
         ]
       );
