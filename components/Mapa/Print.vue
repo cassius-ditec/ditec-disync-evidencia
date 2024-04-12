@@ -1,109 +1,69 @@
-<template >
-  <Modal
-    v-model="openPrint"
-    :title="datePrint.devid"
-    @on-cancel="close"
-    :width="920"
-  >
+<template>
+  <Modal v-model="openPrint" :title="datePrint.devid" @on-cancel="close" :width="920">
     <Row :gutter="16" justify="center">
       <Col span="12">
-        <WizardForm :form="form" @on-validate="submit" :showBack="false">
-
-          <FormItem :label="getUser.empresa.flagInfo ? 'Ocorrência' : 'Caso'" prop="caso" inline>
-            <div style="display:flex; width:100%; gap: 0.5rem;">
-              <Select v-model="form.fields.idCaso" :disabled="temNovoCaso">
-              <Option
-                v-for="(caso, i) in casos"
-                :value="caso.idCasos"
-                :key="i"
-                >{{ caso.ocorrencia }}</Option
-              >
-              </Select>
-              <Button type="primary" @click="temNovoCaso = !temNovoCaso">
-                {{ btnNewCaso }}
-              </Button>
-            </div>
-          </FormItem>
-
-          <div v-if="temNovoCaso">
-            <FormItem label="Nova ocorrência" prop="ocorrencia">
-              <Input v-model="form.fields.ocorrencia"></Input>
-            </FormItem>
-
-            <FormItem
-              :label="getUser.empresa.flagInfo ? 'Data da Ocorrência' : 'Data do Caso'"
-              prop="dataCaso"
-            >
-              <DatePicker
-                type="date"
-                format="dd/MM/yyyy"
-                v-model="datePrint.data"
-                style="width: 100%"
-              />
-            </FormItem>
-
-            <FormItem label="Classificação" prop="idClassificacao">
-              <Select v-model="form.fields.idClassificacao" inline>
-                <Option
-                  v-for="(classificacao, indexClassificacao) in classificacao"
-                  :value="classificacao.idClassificacao"
-                  :key="indexClassificacao"
-                  >{{ classificacao.descricao }}</Option
-                >
-              </Select>
-            </FormItem>
-
-            <FormItem
-              :label="getUser.empresa.flagInfo ? 'Ordem de serviço' : 'Vulgo'"
-            >
-              <Input v-model="form.fields.titulo"></Input>
-            </FormItem>
+      <WizardForm :form="form" @on-validate="submit" :showBack="false">
+        <FormItem :label="getUser.empresa.flagInfo ? 'Ocorrência' : 'Caso'" prop="caso" inline>
+          <div style="display: flex; width: 100%; gap: 0.5rem">
+            <Select v-model="form.fields.idCaso" :disabled="temNovoCaso">
+              <Option v-for="(caso, i) in casos" :value="caso.idCasos" :key="i">{{ caso.ocorrencia | quebraDeLinha }}
+              </Option>
+            </Select>
+            <Button type="primary" @click="temNovoCaso = !temNovoCaso">
+              {{ btnNewCaso }}
+            </Button>
           </div>
+        </FormItem>
 
-          <Divider />
-
-          <FormItem label="Tags">
-            <Input v-model="form.fields.tagsPrint"></Input>
+        <div v-if="temNovoCaso">
+          <FormItem label="Nova ocorrência" prop="ocorrencia">
+            <Input v-model="form.fields.ocorrencia"></Input>
           </FormItem>
 
-          <FormItem
-            :label="getUser.empresa.flagInfo ? 'Data da Ocorrência' : 'Data do Caso'"
-            prop="dataCaso"
-          >
-            <DatePicker
-              type="date"
-              format="dd/MM/yyyy"
-              v-model="datePrint.data"
-              style="width: 100%"
-            />
+          <FormItem :label="getUser.empresa.flagInfo ? 'Data da Ocorrência' : 'Data do Caso'
+            " prop="dataCaso">
+            <DatePicker type="date" format="dd/MM/yyyy" v-model="datePrint.data" style="width: 100%" />
           </FormItem>
 
-          <FormItem label="Classificação" prop="classificacaoPrint">
-            <Select v-model="form.fields.classificacaoPrint" inline>
-              <Option
-                v-for="(classificacao, indexClassificacao) in classificacao"
-                :value="classificacao.idClassificacao"
-                :key="indexClassificacao"
-                >{{ classificacao.descricao }}</Option
-              >
+          <FormItem label="Classificação" prop="idClassificacao">
+            <Select v-model="form.fields.idClassificacao" inline>
+              <Option v-for="(classificacao, indexClassificacao) in classificacao"
+                :value="classificacao.idClassificacao" :key="indexClassificacao">{{ classificacao.descricao }}</Option>
             </Select>
           </FormItem>
 
-          <FormItem label="Agente" prop="agente">
-            <Select v-model="form.fields.agente" filterable>
-              <Option
-                v-for="(agente, i) in agente"
-                :value="agente.iD_Usuario"
-                :key="i"
-                >{{ agente.nome }}</Option
-              >
-            </Select>
+          <FormItem :label="getUser.empresa.flagInfo ? 'Ordem de serviço' : 'Vulgo'">
+            <Input v-model="form.fields.titulo"></Input>
           </FormItem>
+        </div>
 
-        </WizardForm>
+        <Divider />
+
+        <FormItem label="Tags">
+          <Input v-model="form.fields.tagsPrint"></Input>
+        </FormItem>
+
+        <FormItem :label="getUser.empresa.flagInfo ? 'Data da Ocorrência' : 'Data do Caso'
+          " prop="dataCaso">
+          <DatePicker type="date" format="dd/MM/yyyy" v-model="datePrint.data" style="width: 100%" />
+        </FormItem>
+
+        <FormItem label="Classificação" prop="classificacaoPrint">
+          <Select v-model="form.fields.classificacaoPrint" inline>
+            <Option v-for="(classificacao, indexClassificacao) in classificacao" :value="classificacao.idClassificacao"
+              :key="indexClassificacao">{{ classificacao.descricao }}</Option>
+          </Select>
+        </FormItem>
+
+        <FormItem label="Agente" prop="agente">
+          <Select v-model="form.fields.agente" filterable>
+            <Option v-for="(agente, i) in agente" :value="agente.iD_Usuario" :key="i">{{ agente.nome }}</Option>
+          </Select>
+        </FormItem>
+      </WizardForm>
       </Col>
       <Col span="12">
-        <img :src="datePrint.printUrl" alt="Captura de imagem" />
+      <img :src="datePrint.printUrl" alt="Captura de imagem" />
       </Col>
     </Row>
     <div slot="footer">
@@ -126,7 +86,7 @@ export default {
       casos: [],
       agente: [],
       classificacao: [],
-      ocorrenciaFiltrada: '',
+      ocorrenciaFiltrada: "",
 
       form: {
         title: "",
@@ -134,14 +94,14 @@ export default {
         back: { name: "painel-monitoramento" },
         fields: {
           idCaso: null,
-          dataCaso: this.$moment().format('YYYY-MM-DD[T]HH:mm:ss'),
+          dataCaso: this.$moment().format("YYYY-MM-DD[T]HH:mm:ss"),
           ocorrencia: "",
           titulo: "",
           idClassificacao: null,
 
           classificacaoPrint: null,
           agente: null,
-          tagsPrint: ""
+          tagsPrint: "",
         },
         rules: {
           ocorrencia: [
@@ -168,7 +128,7 @@ export default {
               message: "Campo obrigatório",
             },
           ],
-        }
+        },
       },
       temNovoCaso: false,
     };
@@ -178,21 +138,38 @@ export default {
   },
   watch: {
     "form.fields.idCaso"(newVal) {
-      const casoFiltrado = this.casos.find(caso => caso.idCasos === newVal);
-      this.ocorrenciaFiltrada = casoFiltrado ? casoFiltrado.ocorrencia : '';
+      const casoFiltrado = this.casos.find((caso) => caso.idCasos === newVal);
+      this.ocorrenciaFiltrada = casoFiltrado ? casoFiltrado.ocorrencia : "";
     },
   },
   computed: {
     ...mapGetters("auth", ["getUser"]),
     btnNewCaso() {
       if (this.temNovoCaso) {
-        return 'Cancelar';
+        return "Cancelar";
       } else if (this.getUser.empresa.flagInfo) {
-        return 'Nova Ocorrência';
+        return "Nova Ocorrência";
       } else {
-        return 'Novo Caso';
+        return "Novo Caso";
       }
-    }
+    },
+  },
+  filters: {
+    quebraDeLinha(text) {
+      const maxLength = 70;
+      if (text.length <= maxLength) {
+        return text;
+      } else {
+        let truncatedText = text.substring(0, maxLength);
+        if (text[maxLength] !== ' ') {
+          let lastSpaceIndex = truncatedText.lastIndexOf(' ');
+          if (lastSpaceIndex !== -1) {
+            truncatedText = truncatedText.substring(0, lastSpaceIndex);
+          }
+        }
+        return truncatedText + '...';
+      }
+    },
   },
   methods: {
     async init() {
@@ -210,14 +187,13 @@ export default {
         (data) => (this.agente = data)
       );
     },
-    async submit({validation }) {
+    async submit({ validation }) {
       if (!validation) return;
-      
-      if(this.temNovoCaso) {       
-        await this.submitCreateCaso()
-      }
-      else{
-        await this.submitEvidenciaUpload()
+
+      if (this.temNovoCaso) {
+        await this.submitCreateCaso();
+      } else {
+        await this.submitEvidenciaUpload();
       }
     },
     async submitCreateCaso() {
@@ -225,17 +201,17 @@ export default {
         titulo: this.form.fields.titulo,
         dataCaso: this.form.fields.dataCaso
           ? this.$moment(this.form.fields.dataCaso).format(
-              "YYYY-MM-DD[T]HH:mm:ss"
-            )
+            "YYYY-MM-DD[T]HH:mm:ss"
+          )
           : "",
         idClassificacao: this.form.fields.idClassificacao,
         ocorrencia: this.form.fields.ocorrencia,
       };
 
-      await post("/api/Casos", schema)      
+      await post("/api/Casos", schema)
         .then((data) => {
-          this.form.fields.idCaso = data.idCasos
-          return data
+          this.form.fields.idCaso = data.idCasos;
+          return data;
         })
         .then(() => this.submitEvidenciaUpload())
         .catch((error) => {
@@ -246,25 +222,31 @@ export default {
         });
     },
     async submitEvidenciaUpload() {
-
       let schema = {
         iD_Agente: this.form.fields.agente,
         ocorrencia: this.ocorrenciaFiltrada,
         data: this.form.fields.dataCaso,
         classificacao: this.form.fields.classificacaoPrint,
         tags: this.form.fields.tagsPrint,
-        iD_Caso: this.form.fields.idCaso
+        iD_Caso: this.form.fields.idCaso,
       };
 
       schema.data_Gravacao = this.$moment().format("YYYY-MM-DD[T]HH:mm:ss");
 
       let evidencias = JSON.stringify(schema);
 
-      let blob = await fetch(this.datePrint.printUrl).then(r => r.blob());
+      let blob = await fetch(this.datePrint.printUrl).then((r) => r.blob());
       let formData = new FormData();
-      formData.append("file", blob, `captura-${this.$moment().format('YYYYMMDDHHmm')}.png`);
-      
-      await post(`/api/Cloud/UploadArquivoCaso?evidencias=${evidencias}`, formData)
+      formData.append(
+        "file",
+        blob,
+        `captura-${this.$moment().format("YYYYMMDDHHmm")}.png`
+      );
+
+      await post(
+        `/api/Cloud/UploadArquivoCaso?evidencias=${evidencias}`,
+        formData
+      )
         .then((data) => {
           this.$Notice.success({
             title: "Arquivo enviado com sucesso",
@@ -276,22 +258,24 @@ export default {
             desc: error,
           });
         })
-        .finally(() => this.close())
+        .finally(() => this.close());
     },
-    close(){ 
-      this.form.fields.idCaso = null,
-      this.form.fields.dataCaso = this.$moment().format('YYYY-MM-DD[T]HH:mm:ss'),
-      this.form.fields.ocorrencia ="",
-      this.form.fields.titulo = "",
-      this.form.fields.tagsPrint = "",
-      this.form.fields.idClassificacao = null,
-      this.form.fields.classificacaoPrint = null,
-      this.form.fields.agente = null,
-      this.form.fields.tagsPrint = ""
+    close() {
+      (this.form.fields.idCaso = null),
+        (this.form.fields.dataCaso = this.$moment().format(
+          "YYYY-MM-DD[T]HH:mm:ss"
+        )),
+        (this.form.fields.ocorrencia = ""),
+        (this.form.fields.titulo = ""),
+        (this.form.fields.tagsPrint = ""),
+        (this.form.fields.idClassificacao = null),
+        (this.form.fields.classificacaoPrint = null),
+        (this.form.fields.agente = null),
+        (this.form.fields.tagsPrint = "");
 
-      this.temNovoCaso = false
+      this.temNovoCaso = false;
       URL.revokeObjectURL(this.datePrint.printUrl);
-        
+
       this.$emit("closeModal");
     },
   },
@@ -302,6 +286,7 @@ export default {
 img {
   width: 100%;
 }
+
 .agente {
   padding-top: 15px;
   font-weight: 700;
