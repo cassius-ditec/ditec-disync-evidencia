@@ -1,4 +1,4 @@
-# in.tegra
+# Disync Evidências e Obras
 
 ## Build Setup
 
@@ -72,10 +72,10 @@ This directory contains your Vuex store files. Creating a file in this directory
 More information about the usage of this directory in [the documentation](https://nuxtjs.org/docs/2.x/directory-structure/store).
 
 
-#Subir Aplicação
+# Subir Aplicação
 
 
-Verifiquei o ng
+Verifique o ng
 ```
 npm i -g pm2
 ```
@@ -90,8 +90,6 @@ e depois:
 
 ```
 pm2 start 'HOST=<HOST> PORT=<PORT> npm run start' --name '<NOMEAPP>' ```
-
-
 
 onde: 
 - <NOMEAPP>: é o nome da aplicação no server pm2
